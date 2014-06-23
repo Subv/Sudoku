@@ -1,0 +1,11 @@
+﻿<Window x:Class="Sudoku.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Button Content="Generate" HorizontalAlignment="Left" Height="53" Margin="23,244,0,0" VerticalAlignment="Top" Width="194"/>
+        <Button Content="Solve" Height="53" Margin="300,244,23,0" VerticalAlignment="Top"/>
+        <Grid Margin="112,32,117,92"/>
+
+    </Grid>
+</Window>
