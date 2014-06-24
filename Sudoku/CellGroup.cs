@@ -13,23 +13,34 @@ namespace Sudoku
         private SudokuGame game;
         private Random Random;
 
+        private List<int> _candidates;
+        public List<int> Candidates
+        {
+            private set { _candidates = value; }
+            get { return _candidates; }
+        }
+
         public int Index
         {
             get;
             private set;
         }
 
-        public uint[,] Cells
+        public int[,] Cells
         {
             get;
             private set;
         }
 
-        public uint this[int row, int col]
+        public int this[int row, int col]
         {
             get
             {
                 return Cells[row, col];
+            }
+            set
+            {
+                Cells[row, col] = value;
             }
         }
 
@@ -39,27 +50,70 @@ namespace Sudoku
             private set;
         }
 
-        public CellGroup(uint size, SudokuGame _game, int index)
+        public int X
         {
+            get;
+            private set;
+        }
+
+        public int Y
+        {
+            get;
+            private set;
+        }
+
+        public CellGroup(uint size, SudokuGame _game, int index, int x, int y)
+        {
+            X = x;
+            Y = y;
             game = _game;
             Size = size;
             Index = index;
-            Cells = new uint[size, size];
+            Cells = new int[size, size];
             Random = new Random(12340 + index);
             Generate();
         }
 
         public void Generate()
         {
-            var numbers = Enumerable.Range(1, (int)(Size * Size)).ToList();
+
+        }
+
+        public void NotifyCandidates()
+        {
+            _candidates = Enumerable.Range(1, (int)(Size * Size)).ToList();
+
             for (int x = 0; x < Size; ++x)
-            {
                 for (int y = 0; y < Size; ++y)
-                {
-                    int index = Random.Next(numbers.Count());
-                    Cells[x, y] = (uint)numbers[index];
-                    numbers.RemoveAt(index);
-                }
+                    _candidates.Remove(Cells[x, y]);
+        }
+
+        public bool IsSolved()
+        {
+            return _candidates.Count == 0;
+        }
+
+        public void PlaceRandomValue()
+        {
+            if (_candidates.Count == 0)
+                return;
+            
+            // Get a possible value first
+            int index = Random.Next(_candidates.Count);
+            bool set = false;
+            while (!set)
+            {
+                int x = Random.Next((int)Size);
+                int y = Random.Next((int)Size);
+                if (Cells[x, y] != 0)
+                    continue;
+
+                if (!game.CanBePlaced((int)(x + X * Size), (int)(y + Y * Size), _candidates[index]))
+                    continue;
+
+                Cells[x, y] = _candidates[index];
+                _candidates.RemoveAt(index);
+                set = true;
             }
         }
     }
