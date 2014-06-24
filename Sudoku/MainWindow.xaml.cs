@@ -20,9 +20,21 @@ namespace Sudoku
     /// </summary>
     public partial class MainWindow : Window
     {
+        private SudokuGame sudoku = new SudokuGame(9);
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            sudoku = new SudokuGame(9);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            sudoku.Solve();
         }
     }
 }
